@@ -5,6 +5,7 @@ const User = require(`${__basedir}/models`).user;
 const Role = require(`${__basedir}/models`).role;
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
+const Settings = require(`${__basedir}/models`).settings;
 
 /* Process login. */
 router.post('/', async (req, res) => {
@@ -45,11 +46,18 @@ router.post('/', async (req, res) => {
 			expiresIn: process.env.JWT_EXPIRATION_LENGTH
 		});
 
+		const defaultUnitSystem = await Settings.findOne({
+			where: {
+				name: 'default_unit_system'
+			}
+		});
+
 		semaLog.info('sema_login - succeeded');
 
 		res.json({
 			version: req.app.get('sema_version'),
-			token
+			token,
+			unitSystem: defaultUnitSystem.value
 		});
 	} catch(err) {
 		semaLog.warn(`sema_login - Error: ${err}`);
