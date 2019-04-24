@@ -18,7 +18,10 @@ const sequelize = new Sequelize(
 		host: __dbConfig.host,
 		dialect: __dbConfig.dialect,
 		logging: false, // No need to see all those boring SQL queries
-		operatorsAliases: Op // turn off string deprecation error
+		typeCast: true,
+		operatorsAliases: Op, // turn off string deprecation error
+		dateStrings: true,
+		timezone: '+00:00'
 	}
 );
 
